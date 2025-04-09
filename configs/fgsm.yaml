@@ -1,10 +1,8 @@
 attack:
-  method: pgd
+  method: fgsm
   params:
-    epsilon: 8/255
-    step_size: 2/255
-    num_steps: 10
+    epsilon: 16/266
   confidence_threshold: 0.5
 paths:
   model_path: E:/tt100k-x/weights/best.pt
-  save_dir: output/pgd
+  save_dir: output/fgsm
