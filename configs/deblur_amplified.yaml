@@ -1,0 +1,51 @@
+paths:
+  images: []
+  output_dir: "output/deblur_amplified"
+
+runtime:
+  device: "auto"
+  image_size: 640
+
+motion_blur:
+  kernel_size: 21
+  angle: 0.0
+
+detector:
+  model_name: "yolov5s"
+  weights:
+  repo_or_dir: "ultralytics/yolov5"
+  source: "github"
+  confidence_threshold: 0.25
+  iou_threshold: 0.45
+
+deblur:
+  # Options: wiener, richardson_lucy, lightweight_unet, mprnet, nafnet
+  method: "wiener"
+  balance: 0.01
+  iterations: 10
+  checkpoint:
+  weights:
+  repo_dir:
+  width: 24
+  residual_scale: 1.0
+
+attack:
+  epsilon: 0.03137254901960784
+  step_size: 0.00784313725490196
+  steps: 20
+  topk: 40
+  dormancy_tolerance: 0.03
+  lambda_pre: 1.0
+  lambda_vis: 0.15
+  lambda_bg: 0.25
+  lambda_tv: 0.03
+  beta_deblur: 0.35
+  beta_edge: 0.15
+  beta_amp: 0.05
+  mask_threshold: 0.55
+  mask_blur: 17
+  use_region_mask: true
+  saliency_weight: 0.65
+  box_weight: 0.25
+  edge_weight: 0.10
+  init_mode: "amplification"

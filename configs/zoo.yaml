@@ -1,0 +1,10 @@
+attack:
+  method: zoo
+  params:
+    epsilon: 0.3
+    num_steps: 50
+    lr: 0.03
+  confidence_threshold: 0.5
+paths:
+  model_path: E:/tt100k-x/weights/best.pt
+  save_dir: output/zoo

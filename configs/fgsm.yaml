@@ -4,5 +4,7 @@ attack:
     epsilon: 16/266
   confidence_threshold: 0.5
 paths:
-  model_path: E:/tt100k-x/weights/best.pt
-  save_dir: output/fgsm
+#  model_path: E:/tt100k-x/weights/best.pt
+#  model_path: E:/best-kitti.pt
+  model_path: ./yolo11n.pt
+  save_dir: output/fgsm-test/kitti

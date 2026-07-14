@@ -1,0 +1,30 @@
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local IDE files
+.idea/
+.vscode/
+
+# Experiment outputs and temporary files
+output/
+tmp/
+
+# Local datasets, visual samples, and generated attack visualizations
+images/
+core/attacks/attack_*.png
+core/attacks/kernel_*.png
+模糊攻击/
+
+# Downloaded model weights and external repositories
+weights/
+external/
+*.pt
+*.pth
+
+# Common environment folders
+.venv/
+venv/
+env/
+*.egg-info/

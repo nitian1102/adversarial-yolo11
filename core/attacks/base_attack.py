@@ -36,3 +36,12 @@ class BaseAttack:
         obj = predictions[:, 4]
         cls_conf = predictions[:, 5:].max(1)[0]
         return (-1 if targeted else 1) * (obj.sum() + cls_conf.sum())
+
+    @staticmethod
+    def motion_blur_loss(results, device):
+        """计算基于检测置信度的损失（确保输出在GPU）"""
+        if results.boxes is not None and len(results.boxes) > 0:
+            conf_scores = results.boxes.conf  # 已经是GPU张量
+            return -conf_scores.mean()  # 最大化损失取负
+        else:
+            return torch.tensor(0.0, device=device)

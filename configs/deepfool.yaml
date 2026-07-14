@@ -1,0 +1,9 @@
+attack:
+  method: deepfool
+  params:
+    epsilon: 16/255
+    num_steps: 20
+  confidence_threshold: 0.5
+paths:
+  model_path: E:/tt100k-x/weights/best.pt
+  save_dir: output/deepfool

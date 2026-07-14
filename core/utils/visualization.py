@@ -5,12 +5,14 @@ import matplotlib.pyplot as plt
 from ultralytics import YOLO
 from PIL import Image
 from typing import List
+import torchvision.transforms as transforms
 from core.utils import image_utils
 import numpy as np
 
 
 def visualize_attack_comparison(
         original_images: List[Image.Image],
+        # attacked_images: List[Image.Image],
         attacked_images: List[torch.Tensor],
         model_path: str,
         save_dir: str = "output",
@@ -25,12 +27,23 @@ def visualize_attack_comparison(
     model = YOLO(model_path)
 
     for i, (orig, adv) in enumerate(zip(original_images, attacked_images)):
-        orig_resized = image_utils.resize_with_padding(orig, target_size=(640, 640))
-        result_orig = model.predict(orig_resized, imgsz=(640, 640), conf=confidence_threshold)[0]
+        original_size = orig.size
+
+        def resize_detection(img_np, target_size):
+            pil_img = Image.fromarray(img_np.astype('uint8'))
+            return np.array(pil_img.resize(target_size, Image.BICUBIC))
+
+        # orig_resized = image_utils.resize_with_padding(orig, target_size=(640, 640))
+        # adv = image_utils.resize_with_padding(adv, target_size=(640, 640))
+        # result_orig = model.predict(orig_resized, imgsz=(640, 640), conf=confidence_threshold)[0]
+        result_orig = model.predict(orig, imgsz=(640, 640), conf=confidence_threshold)[0]
         result_adv = model.predict(adv, imgsz=(640, 640), conf=confidence_threshold)[0]
 
         img_orig = result_orig.plot(line_width=2)
         img_adv = result_adv.plot(line_width=2)
+
+        img_adv = resize_detection(img_adv, original_size)
+
 
         adv_img_np = adv.detach().cpu().numpy().squeeze(0).transpose(1, 2, 0) * 255
         adv_img_np = adv_img_np.astype(np.uint8)
@@ -39,7 +52,7 @@ def visualize_attack_comparison(
         Image.fromarray(adv_img_np).save(attacked_image_path)
 
         fig, axs = plt.subplots(1, 3, figsize=(20, 6))
-        axs[0].imshow(orig_resized)
+        axs[0].imshow(orig)
         axs[0].set_title("Original Image", fontsize=12)
         axs[0].axis("off")
 
@@ -47,7 +60,7 @@ def visualize_attack_comparison(
         axs[1].set_title("Original Image with Detection", fontsize=12)
         axs[1].axis("off")
 
-        axs[2].imshow(img_adv)
+        axs[2].imshow(img_adv[..., ::-1])
         axs[2].set_title("Attacked Image with Detection", fontsize=12)
         axs[2].axis("off")
 
@@ -57,4 +70,4 @@ def visualize_attack_comparison(
         plt.close()
 
         print(f"Visualization saved to {visualization_path}")
-        print(f"Attacked image saved to {attacked_image_path}")
+        # print(f"Attacked image saved to {attacked_image_path}")

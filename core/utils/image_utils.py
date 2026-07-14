@@ -18,6 +18,7 @@ def process_image(
     img_resized = img.resize(target_size)
     tensor = torch.tensor(
         np.array(img_resized).transpose(2,0,1)/255.0,
+        # np.array(img).transpose(2, 0, 1) / 255.0,
         dtype=torch.float32,
         device=device
     ).unsqueeze(0)
